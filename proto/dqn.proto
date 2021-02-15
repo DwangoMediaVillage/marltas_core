@@ -1,0 +1,36 @@
+syntax = "proto3";
+package dqn;
+
+message Void {}
+
+message BytesData {
+    bytes data = 1;
+}
+
+message PolicyParamRequest {
+    bytes tag = 1;
+    bytes status = 2;
+}
+
+service ReplayBuffer {
+    rpc append_sample(stream BytesData) returns (Void) {}
+    rpc get_status(Void) returns (BytesData) {}
+}
+
+service ParamDistributor {
+    rpc get_param(Void) returns (stream BytesData) {}
+    rpc update_param(stream BytesData) returns (Void) {}
+    rpc get_status(Void) returns (BytesData) {}
+}
+
+service ActorManager {
+    rpc regist_actor(BytesData) returns (Void) {}
+    rpc get_policy_param(PolicyParamRequest) returns (BytesData) {}
+    rpc update_meta_policy_param(BytesData) returns (Void) {}
+    rpc get_status(Void) returns (BytesData) {}
+}
+
+service Evaluator {
+    rpc request_evaluate(BytesData) returns (Void) {}
+    rpc get_status(Void) returns (BytesData) {}
+}
